@@ -52,7 +52,6 @@ class AuditResult:
             "excess_aurc": self.excess_aurc,
         }
 
-
 class TransferAudit:
     """Applies a frozen threshold to OOD data and classifies the result.
 
@@ -63,11 +62,11 @@ class TransferAudit:
         a coverage failure regardless of retained risk.
     """
 
-   def __init__(self, min_coverage: float = 0.20) -> None:
-       if not np.isfinite(min_coverage) or not 0 < min_coverage <= 1:
-           raise ValueError("min_coverage must be in the interval (0, 1]")
+    def __init__(self, min_coverage: float = 0.20) -> None:
+        if not np.isfinite(min_coverage) or not 0 < min_coverage <= 1:
+            raise ValueError("min_coverage must be in the interval (0, 1]")
 
-    self.min_coverage = min_coverage
+        self.min_coverage = min_coverage
 
     def run(
         self,
@@ -87,36 +86,40 @@ class TransferAudit:
             Used only for evaluation here — never for threshold selection.
         """
         ood_scores = np.asarray(ood_scores)
-         ood_errors = np.asarray(ood_errors)
-         
-         if ood_scores.ndim != 1:
-             raise ValueError("OOD scores must be one-dimensional")
-         
-         if ood_errors.ndim != 1:
-             raise ValueError("OOD errors must be one-dimensional")
-         
-         if len(ood_scores) == 0:
-             raise ValueError("OOD data must not be empty")
-         
-         if len(ood_scores) != len(ood_errors):
-             raise ValueError("OOD scores and errors must have the same length")
-         
-         try:
-             scores_are_finite = np.isfinite(ood_scores).all()
-         except TypeError as exc:
-             raise ValueError("OOD scores must be numeric and finite") from exc
-         
-         try:
-             errors_are_finite = np.isfinite(ood_errors).all()
-         except TypeError as exc:
-             raise ValueError("OOD errors must be numeric and finite") from exc
-         
-         if not scores_are_finite:
-             raise ValueError("OOD scores must be finite")
-         
-         if not errors_are_finite:
-             raise ValueError("OOD errors must be finite")
-        aurc, excess_aurc = area_under_risk_coverage(ood_scores, ood_errors)
+        ood_errors = np.asarray(ood_errors)
+
+        if ood_scores.ndim != 1:
+            raise ValueError("OOD scores must be one-dimensional")
+
+        if ood_errors.ndim != 1:
+            raise ValueError("OOD errors must be one-dimensional")
+
+        if len(ood_scores) == 0:
+            raise ValueError("OOD data must not be empty")
+
+        if len(ood_scores) != len(ood_errors):
+            raise ValueError("OOD scores and errors must have the same length")
+
+        try:
+            scores_are_finite = np.isfinite(ood_scores).all()
+        except TypeError as exc:
+            raise ValueError("OOD scores must be numeric and finite") from exc
+
+        try:
+            errors_are_finite = np.isfinite(ood_errors).all()
+        except TypeError as exc:
+            raise ValueError("OOD errors must be numeric and finite") from exc
+
+        if not scores_are_finite:
+            raise ValueError("OOD scores must be finite")
+
+        if not errors_are_finite:
+            raise ValueError("OOD errors must be finite")
+
+        aurc, excess_aurc = area_under_risk_coverage(
+            ood_scores,
+            ood_errors,
+        )
 
         if not frozen.constructed:
             return AuditResult(
@@ -126,7 +129,7 @@ class TransferAudit:
                 risk_violation=None,
                 risk_breach=None,
                 coverage_failure=False,
-                operational_failure=True,  # cannot deploy => operational failure
+                operational_failure=True,
                 aurc=aurc,
                 excess_aurc=excess_aurc,
             )

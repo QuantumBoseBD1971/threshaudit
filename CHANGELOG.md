@@ -9,11 +9,13 @@ and the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Nothing yet.
+- Added validation tests for malformed calibration and OOD inputs.
+- Added CI coverage for feature branches and pull requests.
 
 ### Changed
 
-- Nothing yet.
+- Added explicit validation for tolerance, minimum coverage, array dimensionality, empty inputs, mismatched lengths, and non-finite values.
+- Improved `ThresholdPolicy` and `TransferAudit` error handling so invalid inputs raise clear `ValueError` messages.
 
 ### Fixed
 

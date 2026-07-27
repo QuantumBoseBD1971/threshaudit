@@ -69,6 +69,21 @@ class ThresholdPolicy:
     _rng: np.random.Generator = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
+        if not np.isfinite(self.tolerance) or self.tolerance < 0:
+            raise ValueError("tolerance must be non-negative and finite")
+    
+        if not np.isfinite(self.min_coverage) or not 0 < self.min_coverage <= 1:
+            raise ValueError("min_coverage must be in the interval (0, 1]")
+    
+        if self.n_candidates < 1:
+            raise ValueError("n_candidates must be at least 1")
+    
+        if self.n_bootstrap < 1:
+            raise ValueError("n_bootstrap must be at least 1")
+    
+        if not np.isfinite(self.confidence) or not 0 < self.confidence < 1:
+            raise ValueError("confidence must be in the interval (0, 1)")
+    
         self._rng = np.random.default_rng(self.seed)
 
     def construct(
@@ -95,6 +110,46 @@ class ThresholdPolicy:
             ``min_coverage`` — this is a legitimate, expected outcome and
             should be reported, not treated as an error.
         """
+        calibration_scores = np.asarray(calibration_scores)
+        calibration_errors = np.asarray(calibration_errors)
+        calibration_groups = np.asarray(calibration_groups)
+        
+        if calibration_scores.ndim != 1:
+            raise ValueError("calibration_scores must be one-dimensional")
+        
+        if calibration_errors.ndim != 1:
+            raise ValueError("calibration_errors must be one-dimensional")
+        
+        if calibration_groups.ndim != 1:
+            raise ValueError("calibration_groups must be one-dimensional")
+        
+        if len(calibration_scores) == 0:
+            raise ValueError("calibration data must not be empty")
+        
+        if not (
+            len(calibration_scores)
+            == len(calibration_errors)
+            == len(calibration_groups)
+        ):
+            raise ValueError(
+                "calibration scores, errors, and groups must have the same length"
+            )
+        
+        try:
+            scores_are_finite = np.isfinite(calibration_scores).all()
+        except TypeError as exc:
+            raise ValueError("calibration scores must be numeric and finite") from exc
+        
+        try:
+            errors_are_finite = np.isfinite(calibration_errors).all()
+        except TypeError as exc:
+            raise ValueError("calibration errors must be numeric and finite") from exc
+        
+        if not scores_are_finite:
+            raise ValueError("calibration scores must be finite")
+        
+        if not errors_are_finite:
+            raise ValueError("calibration errors must be finite")
         order = np.argsort(calibration_scores, kind="stable")
         n = len(order)
         candidate_sizes = np.unique(

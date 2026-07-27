@@ -88,6 +88,13 @@ for task, shift, policy_name, result in your_experiment_loop():
 
 report.operational_failure_rate(group_by=["task", "shift"])
 ```
+## Scope
+
+`threshaudit` is domain-agnostic and does not perform model fitting, feature
+engineering, or application-specific data preparation. It accepts user-supplied
+reliability scores, prediction errors, and group identifiers, allowing the same
+frozen-threshold audit to be applied across machine-learning deployments and
+shift definitions.
 
 ## Relationship to the original research
 
@@ -103,6 +110,20 @@ to that domain (formula parsing, composition clustering, materials
 featurization) so the same audit can be applied to any ML deployment
 where a frozen reliability threshold is used to decide whether to trust a
 prediction — not just materials science.
+
+## Roadmap
+
+Planned development is tracked through GitHub issues and will be delivered through
+versioned releases. Current priorities are:
+
+- publish a documented command-line interface for CSV-based audits;
+- add structured JSON and CSV export for audit results;
+- expand input validation and edge-case test coverage;
+- add further domain-agnostic distribution-shift examples;
+- publish user and API documentation through GitHub Pages; and
+- add runtime and scalability benchmarks for larger audit datasets.
+
+See [`CHANGELOG.md`](CHANGELOG.md) for released changes.
 
 ## License
 

@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "threshaudit: Auditing frozen reliability thresholds under distribution shift"
+version: 0.1.0
+date-released: 2026-08-01
+authors:
+  - family-names: "Uddin"
+    given-names: "Mohammed Munir"
+    orcid: "https://orcid.org/0009-0003-0147-2202"
+    affiliation: "Independent Researcher, United Kingdom"
+license: MIT
+repository-code: "https://github.com/QuantumBoseBD1971/threshaudit"
+keywords:
+  - machine learning
+  - uncertainty quantification
+  - selective prediction
+  - distribution shift
+  - reliability
+  - calibration

@@ -52,9 +52,9 @@ ranking metrics such as area under the risk-coverage curve
 *ranking quality* or *distributional calibration*, but they do not establish
 that a specific, frozen, absolute-error acceptance rule will continue to
 hold after a named distribution shift. Recent work in both general machine
-learning [@paplham2026evaluating] and applied domains such as materials
-informatics [@uddin2026evaluating] and machine-learned interatomic
-potentials [@ho2026flexible] has begun to highlight this gap explicitly:
+learning [@paplham2026evaluating] and applied domains such as
+machine-learned interatomic potentials [@ho2026flexible] has begun to
+highlight this gap explicitly:
 a score can rank errors better than chance, or a calibration procedure can
 look well-behaved on held-out data, while a fixed deployment threshold built
 from that score still fails to control absolute risk once the input
@@ -70,9 +70,9 @@ gap: it is domain-agnostic (it does not fit models or engineer features),
 requires only numpy as a hard dependency, and accepts arbitrary
 user-supplied scores and errors from any modelling stack — scikit-learn
 ensembles, deep learning models, or precomputed scores from third-party
-foundation models. This makes it straightforward to run the same audit
-protocol described in @uddin2026evaluating on a new dataset, model, or
-application domain without reimplementing the underlying statistics.
+foundation models. This makes it straightforward to apply a consistent
+audit protocol to a new dataset, model, or application domain without
+reimplementing the underlying statistics.
 
 # Functionality
 
@@ -90,14 +90,8 @@ rate. A small set of built-in `ReliabilityScore` subclasses (ensemble
 disagreement, quantile interval width, nearest-neighbour distance, and a
 rank-based hybrid) are provided for convenience, alongside a
 `PrecomputedScore` wrapper for scores computed elsewhere. A fully
-domain-agnostic worked example, using a synthetic extrapolation scenario
-with no materials-science or chemistry content, is included to demonstrate
-the audit outside the original research domain.
+domain-agnostic worked example using a synthetic extrapolation scenario is
+included to demonstrate the audit workflow.
 
-# Acknowledgements
-
-The audit protocol implemented here was developed as part of an independent
-research study evaluating uncertainty-based reliability policies for
-materials-property prediction [@uddin2026evaluating].
 
 # References
